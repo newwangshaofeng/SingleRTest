@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <script src="../Scripts/jquery-3.3.1.js"></script>
+    <script src="../Scripts/jquery.signalR-2.2.2.js"></script>
+
+    <script src="/signalr/hubs"></script>
+</head>
+<body>
+名称:<input type="text" id="userName"/>
+消息:<input type="text" id="message"/>
+<button id="btn1">点我</button>
+<script type="text/javascript">
+    $(function () {
+        $.connection.testHub.client.onMessage = function (msg)//监听来自服务器端对onMessage的调用。注意是client.
+        {
+            alert("消息来了"+msg);
+        }
+        $.connection.hub.qs = { username:"hello", age: 8 };
+//要在hub.start()之前执行
+        $.connection.hub.start().done(function () {
+            alert("连接testHub成功");
+        }).fail(function () {
+            alert("连接testHub失败");
+        });
+        $("#btn1").click(function () {
+            var userName = $("#userName").val();
+            var messAge = $("#message").val();
+
+
+            $.connection.testHub.server.sendMessage(userName, messAge);//调用服务器端Hub的sendMessage方法
+        });
+    });
+
+</script>
+
+    
+    
+    
+    
+    
+
+</body>
+</html>
